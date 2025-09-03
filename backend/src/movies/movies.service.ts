@@ -1,18 +1,26 @@
 import { Injectable } from "@nestjs/common";
 import { HttpService } from "@nestjs/axios";
+import { ConfigService } from "@nestjs/config";
 import { firstValueFrom } from "rxjs";
 import { MovieResponseDto, GenresResponseDto } from "./dto/movie.dto";
-import { tmdbConfig } from "../config/tmdb.config";
 
 @Injectable()
 export class MoviesService {
-  constructor(private readonly httpService: HttpService) {}
+  private readonly tmdbApiKey: string;
+  private readonly tmdbBaseUrl = "https://api.themoviedb.org/3";
+
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService
+  ) {
+    this.tmdbApiKey = this.configService.get<string>("TMDB_API_KEY");
+  }
 
   async getPopularMovies(page: number = 1): Promise<MovieResponseDto> {
     const response = await firstValueFrom(
-      this.httpService.get(`${tmdbConfig.baseUrl}/movie/popular`, {
+      this.httpService.get(`${this.tmdbBaseUrl}/movie/popular`, {
         params: {
-          api_key: tmdbConfig.apiKey,
+          api_key: this.tmdbApiKey,
           page,
         },
       })
@@ -26,9 +34,9 @@ export class MoviesService {
     page: number = 1
   ): Promise<MovieResponseDto> {
     const response = await firstValueFrom(
-      this.httpService.get(`${tmdbConfig.baseUrl}/search/movie`, {
+      this.httpService.get(`${this.tmdbBaseUrl}/search/movie`, {
         params: {
-          api_key: tmdbConfig.apiKey,
+          api_key: this.tmdbApiKey,
           query,
           page,
         },
@@ -40,9 +48,9 @@ export class MoviesService {
 
   async getGenres(): Promise<GenresResponseDto> {
     const response = await firstValueFrom(
-      this.httpService.get(`${tmdbConfig.baseUrl}/genre/movie/list`, {
+      this.httpService.get(`${this.tmdbBaseUrl}/genre/movie/list`, {
         params: {
-          api_key: tmdbConfig.apiKey,
+          api_key: this.tmdbApiKey,
         },
       })
     );
@@ -55,9 +63,9 @@ export class MoviesService {
     page: number = 1
   ): Promise<MovieResponseDto> {
     const response = await firstValueFrom(
-      this.httpService.get(`${tmdbConfig.baseUrl}/discover/movie`, {
+      this.httpService.get(`${this.tmdbBaseUrl}/discover/movie`, {
         params: {
-          api_key: tmdbConfig.apiKey,
+          api_key: this.tmdbApiKey,
           with_genres: genreId,
           page,
         },
