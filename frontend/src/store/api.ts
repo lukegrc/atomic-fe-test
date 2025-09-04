@@ -18,4 +18,8 @@ export const movieApi = createApi({
   }),
 });
 
-export const { useGetPopularMoviesQuery, useSearchMoviesQuery, useGetGenresQuery } = movieApi;
+export const {
+  useGetPopularMoviesQuery,
+  useSearchMoviesQuery,
+  useGetGenresQuery,
+} = movieApi;

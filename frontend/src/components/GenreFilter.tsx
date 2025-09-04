@@ -7,14 +7,20 @@ interface GenreFilterProps {
   onGenreChange: (genreIds: number[]) => void;
 }
 
-const GenreFilter = ({ genres, selectedGenres, onGenreChange }: GenreFilterProps) => {
+const GenreFilter = ({
+  genres,
+  selectedGenres,
+  onGenreChange,
+}: GenreFilterProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const values = Array.from(e.target.selectedOptions, option => Number(option.value));
+    const values = Array.from(e.target.selectedOptions, (option) =>
+      Number(option.value)
+    );
     onGenreChange(values);
   };
 
   return (
-    <select multiple value={selectedGenres} onChange={handleChange}>
+    <select multiple value={selectedGenres.map(String)} onChange={handleChange}>
       {genres.map((genre) => (
         <option key={genre.id} value={genre.id}>
           {genre.name}
