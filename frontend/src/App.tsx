@@ -1,13 +1,16 @@
-
 import React from "react";
-import MovieList from "./components/MovieList";
+import { Provider } from "react-redux";
+import { store } from "./store";
+import MovieList from "./features/MovieList";
 
 function App() {
   return (
-    <div>
-      <h1>Movie Library</h1>
-      <MovieList />
-    </div>
+    <Provider store={store}>
+      <div>
+        <h1>Movie Library</h1>
+        <MovieList />
+      </div>
+    </Provider>
   );
 }
 
