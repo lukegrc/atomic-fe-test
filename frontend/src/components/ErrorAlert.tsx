@@ -1,4 +1,3 @@
-import React from "react";
 import { Alert, AlertTitle, Box } from "@mui/material";
 
 interface ErrorAlertProps {

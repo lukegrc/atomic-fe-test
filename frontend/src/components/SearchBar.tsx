@@ -21,9 +21,7 @@ const SearchBar = ({
   const watchedQuery = watch("query");
 
   const onSubmit = (data: SearchFormData) => {
-    if (data.query.trim()) {
-      onSearch(data.query.trim());
-    }
+    if (data.query.trim()) onSearch(data.query.trim());
   };
 
   const handleClear = () => {
