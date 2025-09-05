@@ -63,11 +63,28 @@ Runs both frontend and backend concurrently.
 
 ## Deployment
 
-### GitHub Pages
+### Frontend (GitHub Pages)
 
-The app automatically deploys to GitHub Pages on push to main branch.
+The frontend automatically deploys to GitHub Pages on push to main branch.
 
 **Live Demo**: https://lukegrc.github.io/atomic-fe-test
+
+### Backend (Render)
+
+1. Go to https://render.com
+2. Sign up with GitHub
+3. Create new Web Service
+4. Connect your repository
+5. Set Root Directory to `backend`
+6. Add environment variable: `TMDB_API_KEY=your_api_key`
+7. Deploy
+
+### Full Stack Deployment
+
+```bash
+# After deploying backend to Render, get the URL and run:
+./deploy.sh https://your-backend-url.onrender.com
+```
 
 ### Docker
 
@@ -77,15 +94,6 @@ npm run docker:build
 
 # Run container
 npm run docker:run
-```
-
-App will be available at http://localhost:80
-
-### Manual Deployment
-
-```bash
-# Deploy to GitHub Pages
-npm run deploy
 ```
 
 ## API Endpoints
