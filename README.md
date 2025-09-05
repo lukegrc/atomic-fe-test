@@ -61,6 +61,33 @@ npm run dev
 
 Runs both frontend and backend concurrently.
 
+## Deployment
+
+### GitHub Pages
+
+The app automatically deploys to GitHub Pages on push to main branch.
+
+**Live Demo**: https://lukegrc.github.io/atomic-fe-test
+
+### Docker
+
+```bash
+# Build Docker image
+npm run docker:build
+
+# Run container
+npm run docker:run
+```
+
+App will be available at http://localhost:80
+
+### Manual Deployment
+
+```bash
+# Deploy to GitHub Pages
+npm run deploy
+```
+
 ## API Endpoints
 
 - `GET /movies/popular?page=1` - Get popular movies

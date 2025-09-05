@@ -14,7 +14,10 @@
     "build": "npm run build:backend && npm run build:frontend",
     "build:backend": "cd backend && npm run build",
     "build:frontend": "cd frontend && npm run build",
-    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "deploy": "cd frontend && npm run deploy",
+    "docker:build": "docker build -t movie-library .",
+    "docker:run": "docker run -p 80:80 movie-library"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
