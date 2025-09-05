@@ -1,11 +1,19 @@
 import React from "react";
+import { Alert, AlertTitle, Box } from "@mui/material";
 
 interface ErrorAlertProps {
   message: string;
 }
 
 const ErrorAlert = ({ message }: ErrorAlertProps) => {
-  return <div style={{ color: "red" }}>Error: {message}</div>;
+  return (
+    <Box sx={{ width: "100%", mt: 2 }}>
+      <Alert severity="error">
+        <AlertTitle>Error</AlertTitle>
+        {message}
+      </Alert>
+    </Box>
+  );
 };
 
 export default ErrorAlert;

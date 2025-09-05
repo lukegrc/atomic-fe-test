@@ -1,5 +1,14 @@
-import React from "react";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Box,
+  Chip,
+  OutlinedInput,
+} from "@mui/material";
 import { Genre } from "../types/movie";
+import { SelectChangeEvent } from "@mui/material";
 
 interface GenreFilterProps {
   genres: Genre[];
@@ -12,21 +21,42 @@ const GenreFilter = ({
   selectedGenres,
   onGenreChange,
 }: GenreFilterProps) => {
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const values = Array.from(e.target.selectedOptions, (option) =>
-      Number(option.value)
+  const handleChange = (e: SelectChangeEvent<number[]>) => {
+    const value = e.target.value;
+    onGenreChange(
+      typeof value === "string" ? value.split(",").map(Number) : value
     );
-    onGenreChange(values);
   };
 
   return (
-    <select multiple value={selectedGenres.map(String)} onChange={handleChange}>
-      {genres.map((genre) => (
-        <option key={genre.id} value={genre.id}>
-          {genre.name}
-        </option>
-      ))}
-    </select>
+    <Box sx={{ minWidth: 200 }}>
+      <FormControl fullWidth>
+        <InputLabel id="genre-filter-label">Filter by Genre</InputLabel>
+        <Select
+          labelId="genre-filter-label"
+          multiple
+          value={selectedGenres}
+          onChange={handleChange}
+          input={<OutlinedInput label="Filter by Genre" />}
+          renderValue={(s) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {s.map((v) => {
+                const genre = genres.find((g) => g.id === v);
+                return (
+                  <Chip key={v} label={genre?.name || "Unknown"} size="small" />
+                );
+              })}
+            </Box>
+          )}
+        >
+          {genres.map((g) => (
+            <MenuItem key={g.id} value={g.id}>
+              {g.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
   );
 };
 
