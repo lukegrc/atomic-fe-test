@@ -39,6 +39,7 @@ const MovieList = () => {
   );
   const { data: genres } = useGetGenresQuery(undefined);
 
+  // Use search results if searching, otherwise popular movies
   const rawMovies = searchQuery
     ? searchResults?.results
     : popularMovies?.results;
@@ -48,6 +49,7 @@ const MovieList = () => {
   const isLoading = searchQuery ? searchLoading : popularLoading;
   const error = searchQuery ? searchError : popularError;
 
+  // Filter by selected genres
   const movies = useMemo(() => {
     if (!rawMovies || selectedGenres.length === 0) return rawMovies || [];
     return rawMovies.filter((movie: Movie) =>
@@ -57,14 +59,16 @@ const MovieList = () => {
     );
   }, [rawMovies, selectedGenres]);
 
+  // Handle pagination with scroll to top
   const handlePageChange = (_: ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Handle genre filter changes
   const handleGenreChange = (genreIds: number[]) => {
     setSelectedGenres(genreIds);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset to first page when filtering
   };
 
   if (isLoading) return <LoadingSpinner />;

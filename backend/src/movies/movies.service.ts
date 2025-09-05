@@ -4,6 +4,7 @@ import { ConfigService } from "@nestjs/config";
 import { firstValueFrom } from "rxjs";
 import { MovieResponseDto, GenresResponseDto } from "./dto/movie.dto";
 
+// Service for TMDB API calls
 @Injectable()
 export class MoviesService {
   private readonly tmdbApiKey: string;
@@ -16,6 +17,7 @@ export class MoviesService {
     this.tmdbApiKey = this.configService.get<string>("TMDB_API_KEY");
   }
 
+  // Get popular movies with pagination
   async getPopularMovies(page: number = 1): Promise<MovieResponseDto> {
     const response = await firstValueFrom(
       this.httpService.get(`${this.tmdbBaseUrl}/movie/popular`, {
@@ -29,6 +31,7 @@ export class MoviesService {
     return response.data;
   }
 
+  // Search movies by query
   async searchMovies(
     query: string,
     page: number = 1
@@ -46,6 +49,7 @@ export class MoviesService {
     return response.data;
   }
 
+  // Get all available genres
   async getGenres(): Promise<GenresResponseDto> {
     const response = await firstValueFrom(
       this.httpService.get(`${this.tmdbBaseUrl}/genre/movie/list`, {

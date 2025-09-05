@@ -16,6 +16,7 @@ interface GenreFilterProps {
   onGenreChange: (genreIds: number[]) => void;
 }
 
+// Multi-select genre filter with chips display
 const GenreFilter = ({
   genres,
   selectedGenres,
