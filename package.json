@@ -15,9 +15,7 @@
     "build:backend": "cd backend && npm run build",
     "build:frontend": "cd frontend && npm run build",
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
-    "docker:build": "docker build -t movies-app .",
-    "docker:run": "docker run -p 3001:3001 --env-file .env movies-app",
-    "docker:compose": "docker-compose up --build"
+    "docker:backend": "cd backend && docker build -t movies-backend . && docker run -p 3001:3001 --env-file .env movies-backend"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
