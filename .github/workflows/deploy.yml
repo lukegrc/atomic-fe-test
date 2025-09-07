@@ -9,6 +9,10 @@ on:
 jobs:
   deploy-frontend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
 
     steps:
       - name: Checkout code
@@ -38,4 +42,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./frontend/dist
-          cname: # Optional: add your custom domain here
+          force_orphan: true
