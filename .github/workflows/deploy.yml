@@ -37,6 +37,9 @@ jobs:
           cd frontend
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add -f dist
+          # Copy dist contents to root for GitHub Pages
+          cp -r dist/* ../
+          cd ..
+          git add -f index.html assets/
           git commit -m "Deploy frontend" || exit 0
           git push origin main
