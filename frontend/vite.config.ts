@@ -16,8 +16,5 @@ export default defineConfig({
   build: {
     outDir: "dist",
   },
-  base: "/movies-app/",
-  define: {
-    "process.env": process.env,
-  },
+  base: "/",
 });

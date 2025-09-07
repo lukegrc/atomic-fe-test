@@ -65,10 +65,15 @@ const MovieList = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Handle genre filter changes
+  // Handle search query changes - reset page when search changes
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1);
+  };
+
+  // Handle genre filter changes - don't reset page
   const handleGenreChange = (genreIds: number[]) => {
     setSelectedGenres(genreIds);
-    setCurrentPage(1); // Reset to first page when filtering
   };
 
   if (isLoading) return <LoadingSpinner />;
@@ -85,7 +90,7 @@ const MovieList = () => {
         </Typography>
 
         <Box sx={{ mb: 3 }}>
-          <SearchBar onSearch={setSearchQuery} />
+          <SearchBar onSearch={handleSearchChange} />
         </Box>
 
         {genres && (

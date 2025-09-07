@@ -39,9 +39,11 @@ npm run install:all
 ```bash
 cd backend
 cp env.example .env
-# Add your TMDB API key to .env
+# Edit .env and add your TMDB API key
 npm run start:dev
 ```
+
+**Important**: Get your free TMDB API key from https://www.themoviedb.org/settings/api
 
 Backend runs on http://localhost:3001
 
@@ -49,7 +51,7 @@ Backend runs on http://localhost:3001
 
 ```bash
 cd frontend
-npm start
+npm run dev
 ```
 
 Frontend runs on http://localhost:3000
@@ -90,26 +92,46 @@ The frontend automatically deploys to GitHub Pages on push to main branch.
 
 ### Docker
 
-```bash
-# Build Docker image
-npm run docker:build
+#### Production Build
 
-# Run container
-npm run docker:run
+```bash
+# Build and run both frontend and backend containers
+npm run docker:prod
 ```
+
+#### Development with Docker
+
+```bash
+# Run with hot reload for development
+npm run docker:dev
+```
+
+**Docker Notes:**
+
+- Make sure you have a `.env` file in the root directory with your `TMDB_API_KEY`
+- Frontend runs on port 3000 (nginx)
+- Backend API runs on port 3001
+- No backend code changes required - clean separation of concerns
 
 ## API Endpoints
 
-- `GET /movies/popular?page=1` - Get popular movies
-- `GET /movies/search?query=batman&page=1` - Search movies
-- `GET /movies/genres` - Get movie genres
+- `GET /api/movies/popular?page=1` - Get popular movies
+- `GET /api/movies/search?query=batman&page=1` - Search movies
+- `GET /api/movies/genres` - Get movie genres
 
 ## Project Structure
 
 ```
-├── frontend/          # React frontend
+├── frontend/          # React frontend (Vite)
+│   ├── Dockerfile     # Frontend Docker image
+│   ├── Dockerfile.dev # Frontend development Docker
+│   └── nginx.conf     # Nginx configuration
 ├── backend/           # NestJS backend
-├── docker-compose.yml # Docker setup
+│   ├── Dockerfile     # Backend Docker image
+│   └── Dockerfile.dev # Backend development Docker
+├── setup.sh          # Setup script
+├── deploy.sh         # Deployment script
+├── docker-compose.yml # Docker Compose configuration
 └── package.json       # Root workspace config
 ```
 
