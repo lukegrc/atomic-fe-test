@@ -23,10 +23,9 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "predeploy": "npm run build",
-    "deploy": "vite build --base=/atomic-fe-test/ && gh-pages -d dist -r https://github.com/lukegrc/atomic-fe-test.git"
+    "predeploy": "npm run build"
   },
-  "homepage": "https://lukegrc.github.io/atomic-fe-test/",
+  "homepage": "https://lukegrc.github.io/movies-app/",
   "devDependencies": {
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",

@@ -9,7 +9,7 @@
 1. **Sign up at Render**: https://render.com
 2. **Connect GitHub**: Link your repository
 3. **Create New Web Service**: Choose "Deploy from GitHub repo"
-4. **Select Repository**: `lukegrc/atomic-fe-test`
+4. **Select Repository**: `lukegrc/movies-app`
 5. **Configure Service**:
    - Root Directory: `backend`
    - Build Command: `npm install && npm run build`
@@ -97,5 +97,5 @@ REACT_APP_API_URL=https://your-backend-url.railway.app/api/movies
 ## ✅ Testing Deployment
 
 1. **Backend**: Visit `https://your-backend-url.railway.app/api/movies/popular`
-2. **Frontend**: Visit `https://lukegrc.github.io/atomic-fe-test`
+2. **Frontend**: Visit `https://lukegrc.github.io/movies-app`
 3. **Full App**: Test search, filter, and pagination
