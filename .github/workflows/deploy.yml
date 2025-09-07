@@ -27,13 +27,13 @@ jobs:
         env:
           VITE_API_URL: https://atomic-fs-test.onrender.com/api/movies
 
-      - name: Deploy
+      - name: Deploy to main branch
         run: |
-          cd frontend
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          cd frontend
           cp -r dist/* ../
           cd ..
           git add index.html assets/
-          git commit -m "Deploy frontend" || exit 0
+          git commit -m "Deploy frontend from frontend/dist" || exit 0
           git push origin main
