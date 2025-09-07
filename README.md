@@ -1,6 +1,8 @@
-# Movie Library App
+# Movies App
 
 A full-stack movie discovery application built with React, NestJS, and TMDB API.
+
+**Live Demo**: https://lukegrc.github.io/movies-app/
 
 ## Features
 
@@ -27,8 +29,8 @@ A full-stack movie discovery application built with React, NestJS, and TMDB API.
 ### 1. Clone and Install
 
 ```bash
-git clone https://github.com/lukegrc/atomic-fe-test.git
-cd atomic-fe-test
+git clone https://github.com/lukegrc/movies-app.git
+cd movies-app
 npm run install:all
 ```
 
@@ -67,7 +69,7 @@ Runs both frontend and backend concurrently.
 
 The frontend automatically deploys to GitHub Pages on push to main branch.
 
-**Live Demo**: https://lukegrc.github.io/atomic-fe-test
+**Live Demo**: https://lukegrc.github.io/movies-app/
 
 ### Backend (Render)
 

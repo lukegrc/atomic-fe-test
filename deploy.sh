@@ -13,12 +13,18 @@ BACKEND_URL=$1
 
 # Create production environment file
 echo "Creating production environment file..."
-echo "REACT_APP_API_URL=$BACKEND_URL/api/movies" > frontend/.env.production
+echo "VITE_API_URL=$BACKEND_URL/api/movies" > frontend/.env.production
 
-# Deploy frontend to GitHub Pages
-echo "Deploying frontend to GitHub Pages..."
-npm run deploy
+# Build and commit changes
+echo "Building frontend..."
+cd frontend && npm run build && cd ..
+
+# Commit and push changes
+echo "Committing and pushing changes..."
+git add .
+git commit -m "Update production environment for deployment"
+git push origin main
 
 echo "Deployment complete!"
-echo "Frontend: https://lukegrc.github.io/atomic-fe-test"
+echo "Frontend: https://lukegrc.github.io/movies-app/"
 echo "Backend: $BACKEND_URL"

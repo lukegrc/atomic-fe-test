@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Movie Library App Setup Script
-echo "Setting up Movie Library Application..."
+# Movies App Setup Script
+echo "Setting up Movies Application..."
 
 # Check if Node.js is installed
 if ! command -v node &> /dev/null; then
