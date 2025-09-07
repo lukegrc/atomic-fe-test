@@ -116,9 +116,9 @@ npm run docker:run
 ## Key Decisions
 
 - **Monorepo**: Easier dependency management and development workflow
-- **NestJS**: TypeScript-first, decorator-based architecture
-- **RTK Query**: Automatic caching and state management
-- **Material-UI**: Consistent design system and accessibility
+- **NestJS**: Bonus points in project description - Node.js + Express would have been preferred.
+- **RTK Query**: Caching and state management
+- **Material-UI**: Styling
 - **Pagination**: Better UX than infinite scroll for this use case
 
 ## Environment Variables
