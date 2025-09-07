@@ -2,11 +2,13 @@
 node_modules/
 */node_modules/
 
-# Production builds
+# Production builds (but allow root level for deployment)
 build/
-dist/
-*/build/
-*/dist/
+frontend/dist/
+backend/dist/
+# Allow root level deployment files
+!index.html
+!assets/
 
 # Environment variables
 .env
@@ -96,8 +98,6 @@ temp/
 ehthumbs.db
 Thumbs.db
 
-# Docker
-.dockerignore
 
 # TypeScript
 *.tsbuildinfo

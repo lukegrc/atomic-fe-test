@@ -18,28 +18,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18"
-          cache: "npm"
 
-      - name: Install dependencies
-        run: |
-          npm ci
-          cd frontend && npm ci
-
-      - name: Build
+      - name: Install and build
         run: |
           cd frontend
+          npm install
           npm run build
         env:
           VITE_API_URL: https://atomic-fs-test.onrender.com/api/movies
 
-      - name: Deploy to main
+      - name: Deploy
         run: |
           cd frontend
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # Copy dist contents to root for GitHub Pages
           cp -r dist/* ../
           cd ..
-          git add -f index.html assets/
+          git add index.html assets/
           git commit -m "Deploy frontend" || exit 0
           git push origin main

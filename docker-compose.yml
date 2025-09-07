@@ -1,10 +1,8 @@
 version: "3.8"
 
 services:
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+  movies-app:
+    build: .
     ports:
       - "3001:3001"
     environment:
@@ -14,59 +12,3 @@ services:
     volumes:
       - ./.env:/app/.env:ro
     restart: unless-stopped
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "node",
-          "-e",
-          "require('http').get('http://localhost:3001/api/movies/popular?page=1', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })",
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:80"
-    environment:
-      - VITE_API_URL=http://localhost:3001/api/movies
-    depends_on:
-      - backend
-    restart: unless-stopped
-
-  # Development version
-  backend-dev:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.dev
-    ports:
-      - "3001:3001"
-    environment:
-      - NODE_ENV=development
-      - TMDB_API_KEY=${TMDB_API_KEY}
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
-    profiles:
-      - dev
-
-  frontend-dev:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-    ports:
-      - "3000:3000"
-    environment:
-      - VITE_API_URL=http://localhost:3001/api/movies
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    depends_on:
-      - backend-dev
-    profiles:
-      - dev
