@@ -37,6 +37,6 @@ jobs:
           cd frontend
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add dist
+          git add -f dist
           git commit -m "Deploy frontend" || exit 0
           git push origin main
