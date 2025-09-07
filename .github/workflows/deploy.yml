@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Movies App
 
 on:
   push:
@@ -7,15 +7,11 @@ on:
     branches: [main]
 
 jobs:
-  build-and-deploy:
+  deploy-frontend:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -33,18 +29,13 @@ jobs:
         run: |
           cd frontend
           npm run build
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-        if: github.ref == 'refs/heads/main'
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        if: github.ref == 'refs/heads/main'
-        with:
-          path: ./frontend/dist
+        env:
+          VITE_API_URL: https://atomic-fs-test.onrender.com/api/movies
 
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./frontend/dist
+          cname: # Optional: add your custom domain here

@@ -15,7 +15,6 @@
     "build:backend": "cd backend && npm run build",
     "build:frontend": "cd frontend && npm run build",
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
-    "deploy": "cd frontend && npm run deploy",
     "docker:build": "docker-compose build",
     "docker:run": "docker-compose up",
     "docker:dev": "docker-compose --profile dev up --build",
