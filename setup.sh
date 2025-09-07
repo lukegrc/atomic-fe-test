@@ -44,6 +44,15 @@ else
     echo "SUCCESS: Backend .env file already exists"
 fi
 
+# Create frontend .env.local file if it doesn't exist
+if [ ! -f "frontend/.env.local" ]; then
+    echo "Creating frontend .env.local file..."
+    cp frontend/env.example frontend/.env.local
+    echo "SUCCESS: Frontend .env.local file created"
+else
+    echo "SUCCESS: Frontend .env.local file already exists"
+fi
+
 echo ""
 echo "Setup complete!"
 echo ""
