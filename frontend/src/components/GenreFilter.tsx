@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   FormControl,
   InputLabel,
@@ -16,17 +17,19 @@ interface GenreFilterProps {
   onGenreChange: (genreIds: number[]) => void;
 }
 
-// Multi-select genre filter with chips display
 const GenreFilter = ({
   genres,
   selectedGenres,
   onGenreChange,
 }: GenreFilterProps) => {
+  const [open, setOpen] = useState(false);
+
   const handleChange = (e: SelectChangeEvent<number[]>) => {
     const value = e.target.value;
     onGenreChange(
       typeof value === "string" ? value.split(",").map(Number) : value
     );
+    setOpen(false);
   };
 
   return (
@@ -34,6 +37,9 @@ const GenreFilter = ({
       <FormControl fullWidth>
         <InputLabel id="genre-filter-label">Filter by Genre</InputLabel>
         <Select
+          open={open}
+          onOpen={() => setOpen(true)}
+          onClose={() => setOpen(false)}
           labelId="genre-filter-label"
           multiple
           value={selectedGenres}

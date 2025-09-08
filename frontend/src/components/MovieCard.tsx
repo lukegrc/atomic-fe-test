@@ -7,16 +7,28 @@ import {
   Rating,
   Chip,
 } from "@mui/material";
-import { Movie } from "../types/movie";
+import { Movie, Genre } from "../types/movie";
 
 interface MovieCardProps {
   movie: Movie;
+  genres?: Genre[];
 }
 
-const MovieCard = ({ movie }: MovieCardProps) => {
+const MovieCard = ({ movie, genres }: MovieCardProps) => {
   const imageUrl = movie.poster_path
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-    : "https://via.placeholder.com/300x450?text=No+Image";
+    : null;
+
+  // Genre IDs to genre names mapping
+  const getGenreNames = () => {
+    if (!genres || !movie.genre_ids) return [];
+    return movie.genre_ids
+      .map((id) => genres.find((genre) => genre.id === id)?.name)
+      .filter(Boolean)
+      .slice(0, 2);
+  };
+
+  const genreNames = getGenreNames();
 
   return (
     <Card
@@ -25,24 +37,25 @@ const MovieCard = ({ movie }: MovieCardProps) => {
         display: "flex",
         flexDirection: "column",
         transition: "transform 0.2s ease-in-out",
-        "&:hover": {
-          transform: "translateY(-4px)",
-        },
       }}
     >
-      <CardMedia
-        component="img"
-        height="300"
-        image={imageUrl}
-        alt={movie.title}
-        sx={{
-          objectFit: "cover",
-        }}
-      />
+      {imageUrl && (
+        <CardMedia
+          component="img"
+          height="300"
+          image={imageUrl}
+          alt={movie.title}
+          sx={{
+            objectFit: "cover",
+          }}
+        />
+      )}
+
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography gutterBottom variant="h6" component="h2" noWrap>
           {movie.title}
         </Typography>
+
         <Typography
           variant="body2"
           color="text.secondary"
@@ -57,6 +70,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
         >
           {movie.overview || "No overview available"}
         </Typography>
+
         <Box sx={{ mt: 1, display: "flex", alignItems: "center", gap: 1 }}>
           <Rating
             value={movie.vote_average / 2}
@@ -68,12 +82,22 @@ const MovieCard = ({ movie }: MovieCardProps) => {
             ({movie.vote_average.toFixed(1)})
           </Typography>
         </Box>
-        <Box sx={{ mt: 1 }}>
+
+        <Box sx={{ mt: 1, display: "flex", flexWrap: "wrap", gap: 0.5 }}>
           <Chip
             label={new Date(movie.release_date).getFullYear()}
             size="small"
             variant="outlined"
           />
+          {genreNames.map((genreName, index) => (
+            <Chip
+              key={index}
+              label={genreName}
+              size="small"
+              variant="outlined"
+              color="primary"
+            />
+          ))}
         </Box>
       </CardContent>
     </Card>

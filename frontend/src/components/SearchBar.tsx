@@ -14,7 +14,7 @@ interface SearchBarProps {
 
 const SearchBar = ({
   onSearch,
-  placeholder = "Search for movies...",
+  placeholder = "Search",
 }: SearchBarProps) => {
   const { register, handleSubmit, reset, watch } = useForm<SearchFormData>();
 
@@ -30,9 +30,7 @@ const SearchBar = ({
   };
 
   const handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === "Enter") {
-      handleSubmit(onSubmit)();
-    }
+    if (event.key === "Enter") handleSubmit(onSubmit)();
   };
 
   return (

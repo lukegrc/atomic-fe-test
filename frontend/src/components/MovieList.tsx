@@ -1,15 +1,10 @@
-import { useState, useMemo, ChangeEvent } from "react";
-import {
-  Container,
-  Typography,
-  Grid,
-  Box,
-  Paper,
-  Pagination,
-} from "@mui/material";
+import { useState, useMemo, useEffect } from "react";
+import { Container, Typography, Grid, Box, Paper } from "@mui/material";
 import {
   useGetPopularMoviesQuery,
   useSearchMoviesQuery,
+  useGetMoviesByGenreQuery,
+  useSearchMoviesWithGenreQuery,
   useGetGenresQuery,
 } from "../store/api";
 import MovieCard from "./MovieCard";
@@ -17,122 +12,138 @@ import SearchBar from "./SearchBar";
 import GenreFilter from "./GenreFilter";
 import LoadingSpinner from "./LoadingSpinner";
 import ErrorAlert from "./ErrorAlert";
+import Pagination from "./Pagination";
 import { Movie } from "../types/movie";
 
 const MovieList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(1);
 
   const {
     data: popularMovies,
-    isLoading: popularLoading,
-    error: popularError,
-  } = useGetPopularMoviesQuery(currentPage);
-  const {
-    data: searchResults,
-    isLoading: searchLoading,
-    error: searchError,
-  } = useSearchMoviesQuery(
-    { query: searchQuery, page: currentPage },
-    { skip: !searchQuery }
+    isLoading,
+    error,
+  } = useGetPopularMoviesQuery(page);
+
+  const { data: searchResults } = useSearchMoviesQuery(
+    { query: searchQuery, page },
+    { skip: !searchQuery || selectedGenres.length > 0 }
   );
+
+  const { data: genreMovies } = useGetMoviesByGenreQuery(
+    { genreId: selectedGenres[0], page },
+    {
+      skip:
+        !selectedGenres.length || selectedGenres.length > 1 || !!searchQuery,
+    }
+  );
+
+  const { data: searchWithGenreResults } = useSearchMoviesWithGenreQuery(
+    { query: searchQuery, genreIds: selectedGenres || [], page },
+    { skip: !searchQuery || selectedGenres.length === 0 }
+  );
+
   const { data: genres } = useGetGenresQuery(undefined);
 
-  // Use search results if searching, otherwise popular movies
-  const rawMovies = searchQuery
-    ? searchResults?.results
-    : popularMovies?.results;
-  const totalPages = searchQuery
-    ? searchResults?.total_pages
-    : popularMovies?.total_pages;
-  const isLoading = searchQuery ? searchLoading : popularLoading;
-  const error = searchQuery ? searchError : popularError;
+  const currentData = useMemo(() => {
+    if (searchQuery && selectedGenres.length > 0) {
+      return searchWithGenreResults;
+    } else if (searchQuery) {
+      return searchResults;
+    } else if (selectedGenres.length === 1) {
+      return genreMovies;
+    } else {
+      return popularMovies;
+    }
+  }, [
+    searchQuery,
+    selectedGenres.length,
+    searchWithGenreResults,
+    searchResults,
+    genreMovies,
+    popularMovies,
+  ]);
 
-  // Filter by selected genres
-  const movies = useMemo(() => {
-    if (!rawMovies || selectedGenres.length === 0) return rawMovies || [];
-    return rawMovies.filter((movie: Movie) =>
-      movie.genre_ids.some((genreId: number) =>
-        selectedGenres.includes(genreId)
-      )
-    );
-  }, [rawMovies, selectedGenres]);
+  const movies = currentData?.results || [];
+  const maxPages = 500; // Pagination limit
+  const totalPages = Math.min(currentData?.total_pages || 1, maxPages);
 
-  // Handle pagination with scroll to top
-  const handlePageChange = (_: ChangeEvent<unknown>, page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, selectedGenres]);
 
-  // Handle search query changes - reset page when search changes
-  const handleSearchChange = (query: string) => {
+  const handleSearch = (query: string) => {
     setSearchQuery(query);
-    setCurrentPage(1);
   };
 
-  // Handle genre filter changes - don't reset page
   const handleGenreChange = (genreIds: number[]) => {
     setSelectedGenres(genreIds);
   };
 
-  if (isLoading) return <LoadingSpinner />;
+  const handlePageChange = (newPage: number) => {
+    // Ensure page is within valid range
+    if (newPage >= 1 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
+
+  if (isLoading && page === 1) return <LoadingSpinner />;
   if (error) return <ErrorAlert message="Failed to load movies" />;
 
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4, textAlign: "center" }}>
-        <Typography variant="h3" component="h1" gutterBottom>
-          Movie Library
-        </Typography>
-        <Typography variant="h6" color="text.secondary" sx={{ mb: 3 }}>
-          Discover your next favorite movie
+      <Box sx={{ mb: 6, textAlign: "center" }}>
+        <Typography
+          variant="h3"
+          gutterBottom
+          sx={{
+            fontWeight: 600,
+            mb: 4,
+            background: "linear-gradient(45deg, #1976d2, #42a5f5)",
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          Movies
         </Typography>
 
-        <Box sx={{ mb: 3 }}>
-          <SearchBar onSearch={handleSearchChange} />
+        <Box sx={{ mb: 4 }}>
+          <SearchBar onSearch={handleSearch} />
         </Box>
 
         {genres && (
-          <Paper sx={{ p: 2, mb: 3, maxWidth: 400, mx: "auto" }}>
+          <Box sx={{ mb: 3, maxWidth: 400, mx: "auto" }}>
             <GenreFilter
               genres={genres.genres}
               selectedGenres={selectedGenres}
               onGenreChange={handleGenreChange}
             />
-          </Paper>
+          </Box>
         )}
       </Box>
 
-      {movies && movies.length > 0 ? (
-        <>
-          <Grid container spacing={3}>
-            {movies.map((m: Movie) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={m.id}>
-                <MovieCard movie={m} />
-              </Grid>
-            ))}
+      <Grid container spacing={3}>
+        {movies?.map((m: Movie) => (
+          <Grid item xs={12} sm={6} lg={3} key={m.id}>
+            <MovieCard movie={m} genres={genres?.genres} />
           </Grid>
+        ))}
+      </Grid>
 
-          {totalPages && totalPages > 1 && (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-              <Pagination
-                count={totalPages}
-                page={currentPage}
-                onChange={handlePageChange}
-                color="primary"
-                size="large"
-              />
-            </Box>
-          )}
-        </>
-      ) : (
-        <Box sx={{ textAlign: "center", py: 8 }}>
-          <Typography variant="h5" color="text.secondary">
-            No movies found
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Try adjusting your search or filters
+      <Pagination
+        key={`${searchQuery}-${selectedGenres.join(",")}`}
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
+
+      {currentData?.total_pages && currentData.total_pages > maxPages && (
+        <Box sx={{ textAlign: "center", mt: 2 }}>
+          <Typography variant="body2" color="text.secondary">
+            Showing first {maxPages} pages of{" "}
+            {currentData.total_pages.toLocaleString()} total pages
           </Typography>
         </Box>
       )}

@@ -15,6 +15,10 @@ const LoadingSpinner = () => (
     <Typography variant="h6" color="text.secondary">
       Loading movies...
     </Typography>
+    <Typography variant="h6" color="text.secondary">
+      This may take a few minutes due to free API service instance spinning down
+      with inactivity.
+    </Typography>
   </Box>
 );
 

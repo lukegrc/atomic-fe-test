@@ -36,4 +36,17 @@ export class MoviesController {
   ): Promise<MovieResponseDto> {
     return this.moviesService.getMoviesByGenre(genreId, page);
   }
+
+  @Get("search-with-genre")
+  async searchMoviesWithGenre(
+    @Query("q") query: string,
+    @Query("genres") genres: string,
+    @Query("page", new ParseIntPipe({ optional: true })) page: number = 1
+  ): Promise<MovieResponseDto> {
+    if (!query) {
+      throw new Error("Search query is required");
+    }
+    const genreIds = genres ? genres.split(",").map((id) => parseInt(id)) : [];
+    return this.moviesService.searchMoviesWithGenre(query, genreIds, page);
+  }
 }
