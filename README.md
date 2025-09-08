@@ -137,11 +137,19 @@ npm run docker:dev
 
 ## Key Decisions
 
-- **Monorepo**: Easier dependency management and development workflow
-- **NestJS**: Bonus points in project description - Node.js + Express would have been preferred.
+- **Monorepo**: Easier development for small apps
+- **NestJS**: Bonus points in project description - Node.js + Express would have been preferred
+- **Vite**: Fast build tool and dev server for React frontend - chosen over Webpack for faster dev server startup, simpler configuration, and better ES modules support
 - **RTK Query**: Caching and state management
-- **Material-UI**: Styling
-- **Pagination**: Better UX than infinite scroll for this use case
+- **Material-UI**: Quick setup
+
+## Future Improvements
+
+- **Testing**: Add comprehensive unit and integration tests for both frontend and backend
+- **Better Error Handling**: Implement proper fallbacks for missing movie images and data
+- **Paid API Service**: Migrate from Render to a paid service to avoid cold starts and spin-down issues
+- **Movie Pages**: Create dedicated pages for individual movies when cards are clicked
+- **Performance**: Implement image optimization, lazy loading, and code splitting
 
 ## Environment Variables
 
